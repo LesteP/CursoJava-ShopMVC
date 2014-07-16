@@ -14,12 +14,14 @@ public class Repositorio<T> extends HibernateDaoSupport implements IRepositorio<
 	/*' HibernateDaoSupport' Es una clase de SpringFrameWork
 	 * - Esta clase enlaza Spring con hibernate y ya no hace falta crear la clase 'HibernatiUtil.java'*/
 	
+	Session sesion=null;
 	@Override
 	public List<T> get(Class<T> tipo) {
 		
-		Session sesion=null;
 		
-		sesion=getSessionFactory().getCurrentSession();//Con esto obtendremos la sesion actual
+		if(sesion==null || !sesion.isOpen())
+			sesion=getSessionFactory().getCurrentSession();//Con esto obtendremos la sesion actual
+		
 		Query q=sesion.createQuery("from "+tipo.getName());//con la dos lineas siguientes sacaremos la lista
 		List<T> l=(List<T>)q.list();
 				
@@ -28,7 +30,10 @@ public class Repositorio<T> extends HibernateDaoSupport implements IRepositorio<
 
 	@Override
 	public T get(Class<T> tipo, int id) {
-		Session sesion=getSessionFactory().getCurrentSession();
+		
+		if(sesion==null || !sesion.isOpen())
+			sesion=getSessionFactory().getCurrentSession();
+		
 		T obj=(T) sesion.get(tipo, id);//Aqui obtendremos un objeto porque le damos un operador con valor unico
 				
 		return obj;
@@ -36,28 +41,40 @@ public class Repositorio<T> extends HibernateDaoSupport implements IRepositorio<
 
 	@Override
 	public void add(T objeto) {
-		Session sesion=getSessionFactory().getCurrentSession();
+		
+		if(sesion==null || !sesion.isOpen())
+			sesion=getSessionFactory().getCurrentSession();
+		
 		sesion.save(objeto);
 		//Con Spring no hace falta que pongamos transacciones porque el ya se encarga
 	}
 
 	@Override
 	public void delete(T objeto) {
-		Session sesion=getSessionFactory().getCurrentSession();
+		
+		if(sesion==null || !sesion.isOpen())
+			sesion=getSessionFactory().getCurrentSession();
+		
 		sesion.delete(objeto);
 		
 	}
 
 	@Override
 	public void update(T objeto) {
-		Session sesion=getSessionFactory().getCurrentSession();
+		
+		if(sesion==null || !sesion.isOpen())
+			sesion=getSessionFactory().getCurrentSession();
+				
 		sesion.update(objeto);
 		
 	}
 
 	@Override
 	public List<T> find(String consulta, Map<String, Object> params) {
-		Session sesion=getSessionFactory().getCurrentSession();
+		
+		if(sesion==null || !sesion.isOpen())
+			sesion=getSessionFactory().getCurrentSession();
+		
 		Query q=sesion.getNamedQuery(consulta);
 		for (String param : params.keySet()){
 			q.setParameter(param, params.get(param));
