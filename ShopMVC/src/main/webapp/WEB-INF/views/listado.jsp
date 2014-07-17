@@ -6,37 +6,39 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
 </head>
 <body>
 <table>
-<c:forEach items="${tiendas }" var="tienda_producto">
+<c:forEach items="${tiendas }" var="producto">
 	<tr>
-		<td>${tienda_producto.nombre }</td><!-- $: Esto significa que queremos acceder a una variable que es java -->
-		<td>${tienda_producto.descripcion }</td>
-		<td>${tienda_producto.existencias }</td>
-		<td>${tienda_producto.precio }</td>
-		<!-- <td>${tienda_producto.idCategoria }</td>  -->
-		<td><a href="detalle.html?id=${tienda_producto.idProducto}">
+		<td>${producto.nombre }</td><!-- $: Esto significa que queremos acceder a una variable que es java -->
+		<td>${producto.descripcion }</td>
+		<td>${producto.existencias }</td>
+		<td>${producto.precio }</td>
+		<td>
+			<a href="/detalle.html?id=${producto.idProducto}">
 				Ver detalle
 			</a>
+			
 			<a href="#" id="lnkDetalle" 
-					onclick="evento(${tienda_producto.idProducto})">
+					onclick="evento(${producto.idProducto})">
 				Detalle Ajax
 			</a>
-
+		
 		</td>
 	</tr>
-	
-	
-	
 </c:forEach>
 </table>
+
+
 <div id="divDetalle" ></div>
+<script type="text/javascript" src='<c:url value="/resources/js/jquery.js" />'></script><!-- Sin esto no funciona ajax -->
 
 <script type="text/javascript">
-function evento(id){
+function detalle(id){
 
-	var url="empleado/"+id;
+	var url="producto/"+id;
 //HAcemos una llamada ajax usando el metodo get
 //Le pasamos la url y la funcion que se ejecuta cuando nos 
 //devuelve la informacion
@@ -44,10 +46,11 @@ function evento(id){
 
 		var resultado="<ul>";
 		resultado+="<li>"+res.nombre+"</li>";
-		resultado+="<li>"+res.salario+"</li>";
-		resultado+="<li>"+res.puesto.nombre+"</li>";
-		resultado+="<li>"+res.departamento.nombre+"</li></ul>";
-
+		resultado+="<li>"+res.descripcion+"</li>";
+		resultado+="<li>"+res.existencias+"</li>";
+		resultado+="<li>"+res.precio+"</li></ul>";
+		
+		
 		$("#divDetalle").html(resultado);
 
 		});
@@ -55,5 +58,7 @@ function evento(id){
 }
 
 </script>
+
+
 </body>
 </html>

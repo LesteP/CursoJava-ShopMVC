@@ -7,10 +7,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-Nombre: ${tienda_producto.nombre}<br />
-Descripcion: ${tienda_producto.descripcion}<br />
-Existencias: ${tienda_producto.existencias}<br />
-Precio: ${tienda_producto.precio}<br />
-idCategoria: ${tienda_producto.idCategoria}<br />
+
+Nombre: ${producto.nombre}<br />
+Descripcion: ${producto.descripcion}<br />
+Existencias: ${producto.existencias}<br />
+Precio: ${producto.precio}<br />
+
 </body>
 </html>
