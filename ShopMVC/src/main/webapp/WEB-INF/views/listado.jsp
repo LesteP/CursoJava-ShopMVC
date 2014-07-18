@@ -9,7 +9,12 @@
 
 </head>
 <body>
-<table>
+
+Buscar:<input type="text" id="txtBuscar" 
+				placeholder="Parametro de Busqueda">
+	   <input type="button" id="btnBuscar" value="buscar" onclick="buscar()"> 
+<table id="tblDatos">
+
 <c:forEach items="${tiendas }" var="producto">
 	<tr>
 		<td>${producto.nombre }</td><!-- $: Esto significa que queremos acceder a una variable que es java -->
@@ -17,12 +22,13 @@
 		<td>${producto.existencias }</td>
 		<td>${producto.precio }</td>
 		<td>
-			<a href="/detalle.html?id=${producto.idProducto}">
+			<a href="/detalle_{nombre}_{descripcion}_{existencias}_{precio}.html">
+			<!--  <a href="/detalle.html?id=${producto.idProducto}"> -->
 				Ver detalle
 			</a>
 			
 			<a href="#" id="lnkDetalle" 
-					onclick="evento(${producto.idProducto})">
+					onclick="evento(/detalle_{nombre}_{descripcion}_{existencias}_{precio}.html)">
 				Detalle Ajax
 			</a>
 		
@@ -36,6 +42,40 @@
 <script type="text/javascript" src='<c:url value="/resources/js/jquery.js" />'></script><!-- Sin esto no funciona ajax -->
 
 <script type="text/javascript">
+
+function buscar(){
+	var tx=$("#txtBuscar").val();
+	var url="TiendaProducto/buscar/"+tx;	
+
+	$.get(url,function(res){
+
+		var tabla=$("#tblDatos");
+
+		$("#tblDatos tr").each(function(){
+				$(this).remove();
+
+			});
+
+		for(var i=0;i<res.length;i++){
+			var h="<tr>";
+			h+="<td>"+res[i].nombre+"</td>";
+			h+="<td>"+res[i].precio+"</td>";
+			h+="<td><a href='detalle.html?id="+
+					res[i].idProducto+"'>Detalle</a>";
+			h+="<a href='#' onclick='evento("+
+				res[i].idProducto+")'>Detalle ajax</a></td>";
+			h+="</tr>";	
+			tabla.append(h);
+			}
+
+
+
+
+
+		});
+
+}
+
 function detalle(id){
 
 	var url="producto/"+id;
