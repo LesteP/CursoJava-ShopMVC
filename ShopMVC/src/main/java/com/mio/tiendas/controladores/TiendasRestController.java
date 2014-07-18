@@ -7,13 +7,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-
-
-
 
 import com.mio.tiendas.modelo.TiendaProducto;
 import com.mio.tiendas.repositorios.RepositorioTiendaProducto;
@@ -36,12 +33,22 @@ public class TiendasRestController {
 			value="/buscar/{texto}")
 	public @ResponseBody List<TiendaProducto> 
 				buscar(@PathVariable String texto){
-
+	
+		if(texto.equals("NoBuscoNada"))
+			texto="";
+		
 		Map<String, Object> params=new HashMap();
 		params.put("texto", "%"+texto+"%");
 		List<TiendaProducto> l=dao.find("producto.buscador", params);
 		return l;
-
-
+			
+	}
+	@RequestMapping(method=RequestMethod.DELETE)
+	public @ResponseBody String borrar(@RequestBody 
+										TiendaProducto tiendaProducto){
+		
+		dao.delete(tiendaProducto);
+		
+		return "borrado";
 	}
 }

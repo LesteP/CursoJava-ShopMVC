@@ -5,6 +5,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript" 
+src='<c:url value="/resources/js/jquery-1.11.1.min.js" />'></script> <!-- Sin esta linea no funciona ajax porque necesita JQuery -->
+
 <title>Insert title here</title>
 
 </head>
@@ -22,30 +26,53 @@ Buscar:<input type="text" id="txtBuscar"
 		<td>${producto.existencias }</td>
 		<td>${producto.precio }</td>
 		<td>
-			<a href="/detalle_{nombre}_{descripcion}_{existencias}_{precio}.html">
-			<!--  <a href="/detalle.html?id=${producto.idProducto}"> -->
+			
+			<a href="/detalle.html?id=${producto.idProducto}"> 
 				Ver detalle
 			</a>
 			
 			<a href="#" id="lnkDetalle" 
-					onclick="evento(/detalle_{nombre}_{descripcion}_{existencias}_{precio}.html)">
+					onclick="evento(${producto.idProducto})">
 				Detalle Ajax
 			</a>
+		
+			<a href="#" id="lnkBorrar" 
+					onclick="borrar(${producto.idProducto})">
+				Borrar</a>
 		
 		</td>
 	</tr>
 </c:forEach>
 </table>
-
-
 <div id="divDetalle" ></div>
-<script type="text/javascript" src='<c:url value="/resources/js/jquery.js" />'></script><!-- Sin esto no funciona ajax -->
-
 <script type="text/javascript">
+
+function borrar(id){
+	var datos={idProducto:id};
+	var datosPasar=JSON.stringify(datos);
+
+	$.ajax(
+			"producto",{
+				data:datosPasar,
+				method: "DELETE",
+				contentType: "application/json",
+				success: function(res){
+					alert("Producto borrado satisfactoriamente y sin remedio");
+					$("#txtBuscar").text("");
+					buscar();
+					},
+				error: function(res){
+					alert(JSON.stringify(res));
+					}
+
+				}
+			);
+	
+}
 
 function buscar(){
 	var tx=$("#txtBuscar").val();
-	var url="TiendaProducto/buscar/"+tx;	
+	var url="producto/buscar/"+tx;	
 
 	$.get(url,function(res){
 
@@ -64,24 +91,22 @@ function buscar(){
 					res[i].idProducto+"'>Detalle</a>";
 			h+="<a href='#' onclick='evento("+
 				res[i].idProducto+")'>Detalle ajax</a></td>";
+			h+="<a href='#' onclick='borrar("+
+				res[i].idProducto+")'>borrar</a></td>";
 			h+="</tr>";	
 			tabla.append(h);
 			}
 
-
-
-
-
-		});
+	});
 
 }
 
 function detalle(id){
-
 	var url="producto/"+id;
-//HAcemos una llamada ajax usando el metodo get
-//Le pasamos la url y la funcion que se ejecuta cuando nos 
-//devuelve la informacion
+/*Hacemos una llamada ajax usando el metodo get
+*Le pasamos la url y la funcion que se ejecuta cuando nos 
+*devuelve la informacion
+*/
 	$.get(url,function(res){
 
 		var resultado="<ul>";
@@ -90,15 +115,11 @@ function detalle(id){
 		resultado+="<li>"+res.existencias+"</li>";
 		resultado+="<li>"+res.precio+"</li></ul>";
 		
-		
 		$("#divDetalle").html(resultado);
 
 		});
 
 }
-
 </script>
-
-
 </body>
 </html>

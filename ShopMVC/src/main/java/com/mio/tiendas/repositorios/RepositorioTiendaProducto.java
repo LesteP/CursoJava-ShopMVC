@@ -15,8 +15,7 @@ public class RepositorioTiendaProducto extends Repositorio<TiendaProducto> {
 		Hibernate.initialize(tp.getDescripcion());
 		Hibernate.initialize(tp.getExistencias());
 		Hibernate.initialize(tp.getPrecio());
-		//Hibernate.initialize(e.getIdCategoria());
-
+		
 		return tp;
 	}
 
