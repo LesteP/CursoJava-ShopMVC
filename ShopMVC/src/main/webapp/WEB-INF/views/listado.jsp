@@ -51,8 +51,8 @@ function borrar(id){
 	var datos={idProducto:id};
 	var datosPasar=JSON.stringify(datos);
 
-	$.ajax(
-			"producto",{
+	$.ajax("producto",
+			{
 				data:datosPasar,
 				method: "DELETE",
 				contentType: "application/json",

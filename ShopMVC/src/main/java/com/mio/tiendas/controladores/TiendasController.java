@@ -2,17 +2,14 @@ package com.mio.tiendas.controladores;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
-
-
-import com.mio.tiendas.modelo.TiendaCategoria;
+import org.springframework.web.bind.annotation.RequestMethod;
 import com.mio.tiendas.modelo.TiendaProducto;
-import com.mio.tiendas.repositorios.RepositorioTiendaCategoria;
 import com.mio.tiendas.repositorios.RepositorioTiendaProducto;
 
 @Controller
@@ -32,4 +29,18 @@ public class TiendasController {
 		
 		return "listado"/*Siempre son archivos .jsp*/;
 	}
+	@RequestMapping(value="detalle.html",method=RequestMethod.GET)
+	public String detalle(Model modelo,HttpServletRequest request){
+		
+		int id=Integer.parseInt(request.getParameter("id"));
+		
+		TiendaProducto e=daoTiendaProducto.get(TiendaProducto.class, id);
+		
+		
+		
+		modelo.addAttribute("producto", e);
+		
+		return "detalle";
+	}
+	
 }

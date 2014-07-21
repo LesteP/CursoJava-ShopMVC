@@ -28,8 +28,8 @@ import org.hibernate.annotations.NamedQuery;
 @Table(name="tienda_producto"
     ,catalog="teide2014"
 )
-@NamedQuery(name="producto.buscador",
-			query="from TiendaProducto e where e.nombre like :texto")
+@NamedQuery(name="Producto.Buscar",
+			query="from TiendaProducto tp where tp.nombre like :texto")
 
 public class TiendaProducto  implements java.io.Serializable {
 

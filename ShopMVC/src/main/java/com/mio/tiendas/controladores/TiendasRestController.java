@@ -20,34 +20,33 @@ import com.mio.tiendas.repositorios.RepositorioTiendaProducto;
 public class TiendasRestController {
 
 	@Autowired
-	RepositorioTiendaProducto dao;
+	RepositorioTiendaProducto daoTiendaProducto;
 	
-	@RequestMapping(method=RequestMethod.GET,value="/{id}")
+	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public @ResponseBody TiendaProducto tiendaProducto(@PathVariable int id){
 		
-		TiendaProducto tp=dao.get(TiendaProducto.class, id);
+		TiendaProducto tp=daoTiendaProducto.get(TiendaProducto.class, id);
 		
 		return tp;
 	}
-	@RequestMapping(method=RequestMethod.GET,
-			value="/buscar/{texto}")
-	public @ResponseBody List<TiendaProducto> 
-				buscar(@PathVariable String texto){
+	@RequestMapping(value="/buscar/{nombre}",method=RequestMethod.GET)
+	public @ResponseBody List<TiendaProducto> buscar(@PathVariable String texto){
 	
 		if(texto.equals("NoBuscoNada"))
 			texto="";
 		
-		Map<String, Object> params=new HashMap();
+		Map<String, Object> params=new HashMap<String, Object>();
+		
 		params.put("texto", "%"+texto+"%");
-		List<TiendaProducto> l=dao.find("producto.buscador", params);
+		
+		List<TiendaProducto> l=daoTiendaProducto.find("producto.buscador", params);
 		return l;
 			
 	}
 	@RequestMapping(method=RequestMethod.DELETE)
-	public @ResponseBody String borrar(@RequestBody 
-										TiendaProducto tiendaProducto){
+	public @ResponseBody String borrar(@RequestBody	TiendaProducto producto){
 		
-		dao.delete(tiendaProducto);
+		daoTiendaProducto.delete(producto);
 		
 		return "borrado";
 	}
